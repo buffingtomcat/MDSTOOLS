@@ -1,0 +1,91 @@
+{
+  "name": "sqltoolkit",
+  "displayName": "sqlToolkit",
+  "publisher": "MDS-TOOLS",
+  "description": "SQL Toolkit is a VS Code extension designed for SQL developers who use the editor as a work tool.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buffingtomcat/MDSTOOLS" 
+  },
+  "version": "0.0.3",
+  "keywords": [
+    "SQL",
+    "Toolkit",
+    "Database",
+    "Summarize",
+    "Sum",
+    "Remove Duplicates",
+    "Where",
+    "Query",
+    "Productivity",
+    "Oracle",
+    "Snowflake",
+    "PostgreSQL",
+    "MySQL",
+    "MSSQL",
+    "Data Analysis"
+  ],
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sqlToolkit.sumSelectedNumbers",
+        "title": "sqlToolkit: Sum selected numbers (comma as decimal separator)"
+      },
+      {
+        "command": "sqlToolkit.transformToWhere",
+        "title": "sqlToolkit: Transform text to WHERE"
+      },
+      {
+        "command": "sqlToolkit.removeDuplicates",
+        "title": "sqlToolkit: Remove Duplicate Values"
+      },
+      {
+        "command": "sqlToolkit.sortLines",
+        "title": "sqlToolkit: Sort Lines"
+      },
+      {
+        "command": "sqlToolkit.sumSelectedNumbersAlt",
+        "title": "sqlToolkit: Sum selected numbers"
+      }
+      ,
+      {
+        "command": "sqlToolkit.transformToIn",
+        "title": "sqlToolkit: Transform to IN Clause"
+      }
+    ]
+  },
+  "activationEvents": [
+    "onCommand:sqlToolkit.sumSelectedNumbers",
+    "onCommand:sqlToolkit.transformToIn",
+    "onCommand:sqlToolkit.transformToWhyere",
+    "onCommand:sqlToolkit.removeDuplicates",
+    "onCommand:sqlToolkit.sortLines",
+    "onCommand:sqlToolkit.sumSelectedNumbersAlt"
+  ],
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "eslint": "^9.16.0",
+    "typescript": "^5.7.2",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
