@@ -75,7 +75,48 @@ The extension offers the following features:
     ```
     ('abc', 'def', 'ghi')
     ```
+7. **Format Table (`sqlToolkit.formatTable`)**:
+   * Formats a tab-separated table with aligned columns
+   * Right-aligns all data values
+   * Left-aligns headers
+   * Adds separator lines between headers and data
 
+   * Example:
+     Input:
+     ```
+     COLUMN_NAME    VALUE
+     Data1    1234.56
+     LongData    1.23
+     ```
+     Output:
+     ```
+     COLUMN_NAME|   VALUE
+     -----------+--------
+     Data1      | 1234.56
+     LongData   |    1.23
+     ```
+
+8. **Pivot Data (`sqlToolkit.pivotData`)**:
+   * Transforms a tab-separated table into a pivoted format
+   * First column becomes row headers
+   * Creates Value #N columns for each data row
+   * Maintains data alignment and spacing
+
+   * Example:
+     Input:
+     ```
+     ID  NAME    VALUE
+     1   Test1   100
+     2   Test2   200
+     ```
+     Output:
+     ```
+     Name               |Value #1             |Value #2             
+     -------------------+---------------------+--------------------
+     ID                 |1                    |2                   
+     NAME               |Test1                |Test2               
+     VALUE              |100                  |200                 
+     ```
 **How to Use**
 
 1.  Open a file in VS Code.
@@ -107,4 +148,4 @@ https://github.com/buffingtomcat/
 
 **Version**
 
-0.0.3
+0.0.4
