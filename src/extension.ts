@@ -253,6 +253,133 @@ export function activate(context: vscode.ExtensionContext) {
     }
 });
 
+const pivotDataCommand = vscode.commands.registerCommand('sqlToolkit.pivotData', () => {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+      vscode.window.showErrorMessage('No active editor.');
+      return;
+  }
+
+  const selection = editor.selection;
+  if (selection.isEmpty) {
+      vscode.window.showInformationMessage('Please select text to pivot.');
+      return;
+  }
+
+  const text = editor.document.getText(selection);
+  // Limpiar retornos de carro y dividir por líneas
+  const lines = text.trim().split('\n').map(line => line.trim());
+
+  if (lines.length < 2) {
+      vscode.window.showErrorMessage('Need at least headers and one data row.');
+      return;
+  }
+
+  // Limpiar headers y datos usando tabulador
+  const headers = lines[0].trim().split('\t').map(h => h.trim());
+  const dataRows = lines.slice(1).map(line => 
+      line.trim().split('\t').map(cell => cell.trim())
+  );
+
+  // Resto del código igual...
+  const nameWidth = Math.max(30, ...headers.map(h => h.length)) + 2;
+  const valueWidth = 30;
+
+  // Crear separadores
+  const nameColumnSeparator = '-'.repeat(nameWidth);
+  const valueColumnSeparator = '-'.repeat(valueWidth);
+  const separatorLine = `${nameColumnSeparator}+${Array(dataRows.length).fill(valueColumnSeparator).join('+')}`;
+
+  // Crear header de la tabla
+  let result = 'Name'.padEnd(nameWidth) + '|';
+  result += dataRows.map((_, idx) => `Value #${idx + 1}`.padEnd(valueWidth)).join('|');
+  result += '\n' + separatorLine + '\n';
+
+  // Crear filas de datos
+  for (let i = 0; i < headers.length; i++) {
+      const header = headers[i];
+      result += header.padEnd(nameWidth) + '|';
+      
+      // Agregar valores para cada columna
+      const rowValues = dataRows.map(row => {
+          const value = row[i] || '';
+          return value.padEnd(valueWidth);
+      });
+      
+      result += rowValues.join('|') + '\n';
+  }
+
+  editor.edit(editBuilder => {
+      editBuilder.replace(selection, result);
+  }).then(() => {
+      vscode.window.showInformationMessage('Data pivoted successfully.');
+  });
+});
+
+const formatTableCommand = vscode.commands.registerCommand('sqlToolkit.formatTable', () => {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+      vscode.window.showErrorMessage('No active editor.');
+      return;
+  }
+
+  const selection = editor.selection;
+  if (selection.isEmpty) {
+      vscode.window.showInformationMessage('Please select text to format.');
+      return;
+  }
+
+  const text = editor.document.getText(selection);
+  const lines = text.trim().split('\n').map(line => line.trim());
+
+  if (lines.length < 2) {
+      vscode.window.showErrorMessage('Need at least headers and one data row.');
+      return;
+  }
+
+  // Separar columnas usando tabulador
+  const rows = lines.map(line => line.split('\t').map(cell => cell.trim()));
+  const headers = rows[0];
+  const dataRows = rows.slice(1);
+
+  // Calcular ancho máximo para cada columna
+  const columnWidths = headers.map((_, colIndex) => {
+      return Math.max(
+          headers[colIndex].length,
+          ...dataRows.map(row => row[colIndex]?.length || 0)
+      );
+  });
+
+  // Crear separador
+  const separator = columnWidths.map(width => '-'.repeat(width)).join('-+');
+
+
+  // Formatear headers
+  let result = headers.map((header, index) => 
+    header.padEnd(columnWidths[index])
+  ).join(' |') + '\n';
+  
+
+  // Agregar línea separadora
+  result += separator + '\n';
+
+  // Formatear filas de datos
+  dataRows.forEach(row => {
+    const formattedRow = row.map((cell, index) => {
+        // Todos los valores alineados a la derecha
+        return cell.padStart(columnWidths[index]);
+    });
+    result += formattedRow.join(' |') + '\n';
+});
+
+  editor.edit(editBuilder => {
+      editBuilder.replace(selection, result);
+  });
+});
+
+
+  context.subscriptions.push(formatTableCommand);
+  context.subscriptions.push(pivotDataCommand);
   context.subscriptions.push(transformToInCommand);
   context.subscriptions.push(sortLinesCommand);
   context.subscriptions.push(removeDuplicatesCommand);
