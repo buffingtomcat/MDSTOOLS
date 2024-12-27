@@ -3,11 +3,17 @@
   "displayName": "sqlToolkit",
   "publisher": "MDS-TOOLS",
   "description": "SQL Toolkit is a VS Code extension designed for SQL developers who use the editor as a work tool.",
+  "capabilities": {
+    "virtualWorkspaces": true,
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/buffingtomcat/MDSTOOLS" 
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "keywords": [
     "SQL",
     "Toolkit",
@@ -58,17 +64,17 @@
       {
         "command": "sqlToolkit.transformToIn",
         "title": "sqlToolkit: Transform to IN Clause"
+      },
+      {
+        "command": "sqlToolkit.pivotData",
+        "title": "SQL Toolkit: Pivot Data"
+      },
+      {
+        "command": "sqlToolkit.formatTable",
+        "title": "sqlToolkit: Format Table"
       }
     ]
   },
-  "activationEvents": [
-    "onCommand:sqlToolkit.sumSelectedNumbers",
-    "onCommand:sqlToolkit.transformToIn",
-    "onCommand:sqlToolkit.transformToWhyere",
-    "onCommand:sqlToolkit.removeDuplicates",
-    "onCommand:sqlToolkit.sortLines",
-    "onCommand:sqlToolkit.sumSelectedNumbersAlt"
-  ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
